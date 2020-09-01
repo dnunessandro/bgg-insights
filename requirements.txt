@@ -4,4 +4,4 @@ flask-restful
 requests
 scipy
 matplotlib
-kapteyn==3.0
+kapteyn==2.3.1
