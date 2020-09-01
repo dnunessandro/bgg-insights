@@ -2,7 +2,7 @@ from flask import Flask, request
 from json import loads
 from flask_restful import Resource, Api, reqparse
 import requests
-from collection import Collection
+from .classes.collection import Collection
 from utils import getCurveFit, getBestCurveFit
 
 
