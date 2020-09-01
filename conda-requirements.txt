@@ -1,6 +1,5 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
-# platform: osx-64
 aniso8601=8.0.0=py_0
 autopep8=1.4.4=py_0
 brotlipy=0.7.0=py36h37b9a7d_1000
