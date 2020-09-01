@@ -7,7 +7,7 @@ from utils import getCurveFit, getBestCurveFit
 
 
 # Config (TEMP)
-API_ROOT_URL = 'http://localhost:3000'
+API_ROOT_URL = 'https://sn-bgg-server.herokuapp.com/'
 
 app = Flask(__name__)
 api = Api(app)
