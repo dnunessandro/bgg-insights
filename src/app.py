@@ -87,4 +87,4 @@ api.add_resource(PolyFit, '/utils/fit')
 api.add_resource(BestPolyFit, '/utils/bestfit')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
