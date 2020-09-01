@@ -5,7 +5,6 @@ channels:
 dependencies:
   - flask
   - flask-restful
-  - kapteyn
   - numpy
   - requests
   - scipy
