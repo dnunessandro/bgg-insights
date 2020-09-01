@@ -1,7 +1,4 @@
 name: insights
-channels:
-  - conda-forge
-  - defaults
 dependencies:
   - aniso8601=8.0.0=py_0
   - autopep8=1.4.4=py_0
@@ -52,4 +49,3 @@ dependencies:
   - wheel=0.34.2=py_1
   - xz=5.2.5=h0b31af3_0
   - zlib=1.2.11=h0b31af3_1006
-prefix: /Users/sandro.nunes/opt/anaconda3/envs/insights
