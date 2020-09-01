@@ -1,10 +1,9 @@
 name: insights
 channels:
   - conda-forge
+  - defaults
 dependencies:
   - flask
   - flask-restful
-  - numpy
   - requests
-  - scipy
   - kapteyn=2.3
