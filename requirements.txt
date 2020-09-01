@@ -1,7 +1,0 @@
-numpy
-flask
-flask-restful
-requests
-scipy
-matplotlib
-kapteyn==2.3
