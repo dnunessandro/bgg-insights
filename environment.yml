@@ -3,9 +3,9 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - flask=1.1.2
+  - flask
   - flask-restful
-  - kapteyn=2.3
-  - numpy=1.18.4
-  - requests=2.23.0
-  - scipy=1.4.1
+  - kapteyn
+  - numpy
+  - requests
+  - scipy
