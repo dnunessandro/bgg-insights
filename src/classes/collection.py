@@ -4,7 +4,7 @@ from datetime import datetime
 from copy import copy
 from .boardgame import Boardgame
 from .insight import Insight
-from utils import getBestCurveFit, getHighestCountKeys
+from ..utils import getBestCurveFit, getHighestCountKeys
 from collections import Counter
 
 LAST_LOGGED_PLAY_THRESH = 180
