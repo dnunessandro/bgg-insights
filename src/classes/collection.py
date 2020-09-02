@@ -4,7 +4,7 @@ from datetime import datetime
 from copy import copy
 from .boardgame import Boardgame
 from .insight import Insight
-from ..utils import getBestCurveFit, getHighestCountKeys
+from utils import getBestCurveFit, getHighestCountKeys
 from collections import Counter
 
 LAST_LOGGED_PLAY_THRESH = 180
@@ -126,6 +126,79 @@ class Collection:
                 return True
             else:
                 return False
+
+    def checkIfAnyBggRatings(self):
+        ratings = [x.bayesAverageRating for x in self.items]
+        for rating in ratings:
+            if(rating != None):
+                return True
+            else:
+                return False
+
+    def checkIfAnyAvgRatings(self):
+        ratings = [x.averageRating for x in self.items]
+        for rating in ratings:
+            if(rating != None):
+                return True
+            else:
+                return False
+
+    def checkIfAnyYear(self):
+        years = [x.yearPublished for x in self.items]
+        for year in years:
+            if(year != None):
+                return True
+            else:
+                return False
+
+    def checkIfAnyMaxPlayers(self):
+        players = [x.maxPlayers for x in self.items]
+        for player in players:
+            if(player != None):
+                return True
+            else:
+                return False
+
+    def checkIfAnyMinPlayers(self):
+        players = [x.minPlayers for x in self.items]
+        for player in players:
+            if(player != None):
+                return True
+            else:
+                return False
+
+    def checkIfAnyRecommendedPlayers(self):
+        players = [x.recommendedPlayers for x in self.items]
+        for player in players:
+            if(player != None):
+                return True
+            else:
+                return False
+
+    def checkIfAnyPrices(self):
+        prices = [x.medianPriceNew for x in self.items]
+        for price in prices:
+            if(price != None):
+                return True
+            else:
+                return False
+
+    def checkIfAnyRanks(self):
+        ranks = self.getAllRanks()
+        for rank in ranks:
+            if(rank != None):
+                return True
+            else:
+                return False
+
+    def checkIfAnyWeights(self):
+        weights = [
+            x.averageWeight for x in self.items if x.averageWeight is not None]
+
+        if len(weights) != 0:
+            return True
+        else:
+            return False
 
     def getItemsValue(self):
         return [x.getItemValue() for x in self.items]
@@ -1000,46 +1073,58 @@ def genInsightAvgValue(collection):
 
 def genInsightMaxWeight(collection):
     insightType = 'maxWeight'
-    maxWeightItem = collection.getMaxWeightItem()
-    insightData = {
-        'maxWeight': round(maxWeightItem.averageWeight, 2),
-        'items': [{
-            'id': maxWeightItem.id,
-            'name': maxWeightItem.name,
-            'image': maxWeightItem.image,
-            'weight': maxWeightItem.averageWeight}]
-    }
-    insightStatus = "ok"
+    if not collection.checkIfAnyWeights():
+        insightData = {}
+        insightStatus = 'No weights.'
+    else:
+        maxWeightItem = collection.getMaxWeightItem()
+        insightData = {
+            'maxWeight': round(maxWeightItem.averageWeight, 2),
+            'items': [{
+                'id': maxWeightItem.id,
+                'name': maxWeightItem.name,
+                'image': maxWeightItem.image,
+                'weight': maxWeightItem.averageWeight}]
+        }
+        insightStatus = "ok"
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightMinWeight(collection):
     insightType = 'minWeight'
-    minWeightItem = collection.getMinWeightItem()
-    insightData = {
-        'minWeight': round(minWeightItem.averageWeight, 2),
-        'items': [{
-            'id': minWeightItem.id,
-            'name': minWeightItem.name,
-            'image': minWeightItem.image,
-            'weight': minWeightItem.averageWeight}]
-    }
-    insightStatus = "ok"
+    if not collection.checkIfAnyWeights():
+        insightData = {}
+        insightStatus = 'No weights.'
+    else:
+        minWeightItem = collection.getMinWeightItem()
+        insightData = {
+            'minWeight': round(minWeightItem.averageWeight, 2),
+            'items': [{
+                'id': minWeightItem.id,
+                'name': minWeightItem.name,
+                'image': minWeightItem.image,
+                'weight': minWeightItem.averageWeight}]
+        }
+        insightStatus = "ok"
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightAvgWeight(collection):
     insightType = 'avgWeight'
-    avgWeight = collection.getAvgWeight()
-    insightData = {
-        'avgWeight': round(avgWeight, 2),
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'weight': x.averageWeight} for x in collection.items if x.averageWeight is not None]
-    }
-    insightStatus = "ok"
+    if not collection.checkIfAnyWeights():
+        insightData = {}
+        insightStatus = 'No weights.'
+    else:
+        avgWeight = collection.getAvgWeight()
+        insightData = {
+            'avgWeight': round(avgWeight, 2),
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'weight': x.averageWeight} for x in collection.items if x.averageWeight is not None]
+        }
+        insightStatus = "ok"
     return Insight(insightType, insightData, insightStatus)
 
 
@@ -1102,97 +1187,119 @@ def genInsightAvgRating(collection):
 
 def genInsightHighestBggRating(collection):
     insightType = 'highestBggRating'
-
-    highestBggRatingItem = collection.getHighestBggRating()
-    insightData = {
-        'highestBggRating': round(highestBggRatingItem.bayesAverageRating, 2),
-        'items': [{
-            'id': highestBggRatingItem.id,
-            'name': highestBggRatingItem.name,
-            'image': highestBggRatingItem.image,
-            'bggRating': highestBggRatingItem.bayesAverageRating}]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyBggRatings():
+        insightData = {}
+        insightStatus = 'No rated items.'
+    else:
+        highestBggRatingItem = collection.getHighestBggRating()
+        insightData = {
+            'highestBggRating': round(highestBggRatingItem.bayesAverageRating, 2),
+            'items': [{
+                'id': highestBggRatingItem.id,
+                'name': highestBggRatingItem.name,
+                'image': highestBggRatingItem.image,
+                'bggRating': highestBggRatingItem.bayesAverageRating}]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightLowestBggRating(collection):
     insightType = 'lowestBggRating'
-
-    lowestBggRatingItem = collection.getLowestBggRating()
-    insightData = {
-        'lowestBggRating': round(lowestBggRatingItem.bayesAverageRating, 2),
-        'items': [{
-            'id': lowestBggRatingItem.id,
-            'name': lowestBggRatingItem.name,
-            'image': lowestBggRatingItem.image,
-            'bggRating': lowestBggRatingItem.bayesAverageRating}]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyBggRatings():
+        insightData = {}
+        insightStatus = 'No rated items.'
+    else:
+        lowestBggRatingItem = collection.getLowestBggRating()
+        insightData = {
+            'lowestBggRating': round(lowestBggRatingItem.bayesAverageRating, 2),
+            'items': [{
+                'id': lowestBggRatingItem.id,
+                'name': lowestBggRatingItem.name,
+                'image': lowestBggRatingItem.image,
+                'bggRating': lowestBggRatingItem.bayesAverageRating}]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightAvgBggRating(collection):
     insightType = 'avgBggRating'
 
-    avgBggRating = collection.getAvgBggRating()
-    insightData = {
-        'avgBggRating': round(avgBggRating, 2),
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'bggRating': x.bayesAverageRating} for x in collection.items]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyBggRatings():
+        insightData = {}
+        insightStatus = 'No rated items.'
+    else:
+        avgBggRating = collection.getAvgBggRating()
+        insightData = {
+            'avgBggRating': round(avgBggRating, 2),
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'bggRating': x.bayesAverageRating} for x in collection.items]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightHighestAvgRating(collection):
     insightType = 'highestAvgRating'
 
-    highestAvgRatingItem = collection.getHighestAvgRating()
-    insightData = {
-        'highestAvgRating': round(highestAvgRatingItem.averageRating, 2),
-        'items': [{
-            'id': highestAvgRatingItem.id,
-            'name': highestAvgRatingItem.name,
-            'image': highestAvgRatingItem.image,
-            'avgRating': highestAvgRatingItem.averageRating}]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyAvgRatings():
+        insightData = {}
+        insightStatus = 'No rated items.'
+    else:
+        highestAvgRatingItem = collection.getHighestAvgRating()
+        insightData = {
+            'highestAvgRating': round(highestAvgRatingItem.averageRating, 2),
+            'items': [{
+                'id': highestAvgRatingItem.id,
+                'name': highestAvgRatingItem.name,
+                'image': highestAvgRatingItem.image,
+                'avgRating': highestAvgRatingItem.averageRating}]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightLowestAvgRating(collection):
     insightType = 'lowestAvgRating'
 
-    lowestAvgRatingItem = collection.getLowestAvgRating()
-    insightData = {
-        'lowestAvgRating': round(lowestAvgRatingItem.averageRating, 2),
-        'items': [{
-            'id': lowestAvgRatingItem.id,
-            'name': lowestAvgRatingItem.name,
-            'image': lowestAvgRatingItem.image,
-            'avgRating': lowestAvgRatingItem.averageRating}]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyAvgRatings():
+        insightData = {}
+        insightStatus = 'No rated items.'
+    else:
+        lowestAvgRatingItem = collection.getLowestAvgRating()
+        insightData = {
+            'lowestAvgRating': round(lowestAvgRatingItem.averageRating, 2),
+            'items': [{
+                'id': lowestAvgRatingItem.id,
+                'name': lowestAvgRatingItem.name,
+                'image': lowestAvgRatingItem.image,
+                'avgRating': lowestAvgRatingItem.averageRating}]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightAvgAvgRating(collection):
     insightType = 'avgAvgRating'
 
-    avgAvgRating = collection.getAvgAvgRating()
-    insightData = {
-        'avgAvgRating': round(avgAvgRating, 2),
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'avgRating': x.averageRating} for x in collection.items]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyAvgRatings():
+        insightData = {}
+        insightStatus = 'No rated items.'
+    else:
+        avgAvgRating = collection.getAvgAvgRating()
+        insightData = {
+            'avgAvgRating': round(avgAvgRating, 2),
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'avgRating': x.averageRating} for x in collection.items]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
@@ -1661,170 +1768,210 @@ def genInsightPlaysPriceCorr(collection):
 def genInsightAvgYear(collection):
     insightType = 'avgYear'
 
-    avgYear = collection.getAvgYear()
-    insightData = {
-        'avgYear': avgYear,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'yearPublished': x.yearPublished} for x in collection.items]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyYear():
+        insightData = {}
+        insightStatus = 'No items with publication year.'
+    else:
+        avgYear = collection.getAvgYear()
+        insightData = {
+            'avgYear': avgYear,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'yearPublished': x.yearPublished} for x in collection.items]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightMostCommonYears(collection):
     insightType = 'mostCommonYears'
-
-    yearOccurrences = collection.getYearOccurrences()
-    yearOccurrencesKeys = list(yearOccurrences.keys())
-    yearOccurrencesValues = list(yearOccurrences.values())
-    maxOccurrences = max(yearOccurrencesValues)
-    maxOccurrencesIndexes = [i for i, x in enumerate(
-        yearOccurrencesValues) if x == max(yearOccurrencesValues)]
-    insightData = {
-        'mostCommonYears': [yearOccurrencesKeys[index] for index in maxOccurrencesIndexes],
-        'mostCommonYearOccurrences': maxOccurrences,
-        'yearOccurences': yearOccurrences,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'yearPublished': x.yearPublished} for x in collection.items if x.yearPublished in [yearOccurrencesKeys[index] for index in maxOccurrencesIndexes]]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyYear():
+        insightData = {}
+        insightStatus = 'No items with publication year.'
+    else:
+        yearOccurrences = collection.getYearOccurrences()
+        yearOccurrencesKeys = list(yearOccurrences.keys())
+        yearOccurrencesValues = list(yearOccurrences.values())
+        maxOccurrences = max(yearOccurrencesValues)
+        maxOccurrencesIndexes = [i for i, x in enumerate(
+            yearOccurrencesValues) if x == max(yearOccurrencesValues)]
+        insightData = {
+            'mostCommonYears': [yearOccurrencesKeys[index] for index in maxOccurrencesIndexes],
+            'mostCommonYearOccurrences': maxOccurrences,
+            'yearOccurences': yearOccurrences,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'yearPublished': x.yearPublished} for x in collection.items if x.yearPublished in [yearOccurrencesKeys[index] for index in maxOccurrencesIndexes]]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightAvgRecommendedPlayers(collection):
     insightType = 'avgRecommendedPlayers'
 
-    avgRecommendedPlayers = collection.getAvgRecommendedPlayers()
-    insightData = {
-        'avgRecommendedPlayers': avgRecommendedPlayers,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'recommendedPlayers': x.recommendedPlayers} for x in collection.items]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyRecommendedPlayers():
+        insightData = {}
+        insightStatus = 'No items with recommended players registered.'
+    else:
+        avgRecommendedPlayers = collection.getAvgRecommendedPlayers()
+        insightData = {
+            'avgRecommendedPlayers': avgRecommendedPlayers,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'recommendedPlayers': x.recommendedPlayers} for x in collection.items]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightAvgMaxPlayers(collection):
     insightType = 'avgMaxPlayers'
 
-    avgMaxPlayers = collection.getAvgMaxPlayers()
-    insightData = {
-        'avgMaxPlayers': avgMaxPlayers,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'maxPlayers': x.maxPlayers} for x in collection.items]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyMaxPlayers():
+        insightData = {}
+        insightStatus = 'No items with max players registered.'
+    else:
+        avgMaxPlayers = collection.getAvgMaxPlayers()
+        insightData = {
+            'avgMaxPlayers': avgMaxPlayers,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'maxPlayers': x.maxPlayers} for x in collection.items]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
+
 
 def genInsightMedianMaxPlayers(collection):
     insightType = 'medianMaxPlayers'
 
-    medianMaxPlayers = collection.getMedianMaxPlayers()
-    insightData = {
-        'medianMaxPlayers': medianMaxPlayers,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'maxPlayers': x.maxPlayers} for x in collection.items]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyMaxPlayers():
+        insightData = {}
+        insightStatus = 'No items with max players registered.'
+    else:
+        medianMaxPlayers = collection.getMedianMaxPlayers()
+        insightData = {
+            'medianMaxPlayers': medianMaxPlayers,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'maxPlayers': x.maxPlayers} for x in collection.items]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightAvgMinPlayers(collection):
     insightType = 'avgMinPlayers'
 
-    avgMinPlayers = collection.getAvgMinPlayers()
-    insightData = {
-        'avgMinPlayers': avgMinPlayers,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'minPlayers': x.minPlayers} for x in collection.items]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyMinPlayers():
+        insightData = {}
+        insightStatus = 'No items with min players registered.'
+    else:
+        avgMinPlayers = collection.getAvgMinPlayers()
+        insightData = {
+            'avgMinPlayers': avgMinPlayers,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'minPlayers': x.minPlayers} for x in collection.items]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightAvgPrice(collection):
     insightType = 'avgPrice'
 
-    avgPrice = collection.getAvgPrice()
-    insightData = {
-        'avgPrice': avgPrice,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None and x.medianPriceNew <= 500]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyPrices():
+        insightData = {}
+        insightStatus = 'No items with price registered.'
+    else:
+        avgPrice = collection.getAvgPrice()
+        insightData = {
+            'avgPrice': avgPrice,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None and x.medianPriceNew <= 500]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightMedianPrice(collection):
     insightType = 'medianPrice'
 
-    medianPrice = collection.getMedianPrice()
-    insightData = {
-        'medianPrice': medianPrice,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyPrices():
+        insightData = {}
+        insightStatus = 'No items with price registered.'
+    else:
+        medianPrice = collection.getMedianPrice()
+        insightData = {
+            'medianPrice': medianPrice,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightTotalPrice(collection):
     insightType = 'totalPrice'
 
-    totalPrice = collection.getTotalPrice()
-    insightData = {
-        'totalPrice': totalPrice,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None and x.medianPriceNew <= 500]
-    }
-    insightStatus = 'ok'
+    if not collection.checkIfAnyPrices():
+        insightData = {}
+        insightStatus = 'No items with price registered.'
+    else:
+        totalPrice = collection.getTotalPrice()
+        insightData = {
+            'totalPrice': totalPrice,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None and x.medianPriceNew <= 500]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
 def genInsightTop100(collection):
     insightType = 'top100'
 
-    ranks = [x for x in collection.getAllRanks() if x is not None]
-    nTop100 = sum([1 for x in ranks if x <= 100])
-    prctTop100 = nTop100 / len(ranks)
+    if not collection.checkIfAnyRanks():
+        insightData = {}
+        insightStatus = 'No items with rank registered.'
+    else:
+        ranks = [x for x in collection.getAllRanks() if x is not None]
+        nTop100 = sum([1 for x in ranks if x <= 100])
+        prctTop100 = nTop100 / len(ranks)
 
-    insightData = {
-        'nTop100': nTop100,
-        'prctTop100': prctTop100,
-        'items': [{
-            'id': x.id,
-            'name': x.name,
-            'image': x.image,
-            'rank': x.getRank()} for x in collection.items if x.getRank() is not None and x.getRank() <= 100]
-    }
-    insightStatus = 'ok'
+        insightData = {
+            'nTop100': nTop100,
+            'prctTop100': prctTop100,
+            'items': [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'rank': x.getRank()} for x in collection.items if x.getRank() is not None and x.getRank() <= 100]
+        }
+        insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
 
 
