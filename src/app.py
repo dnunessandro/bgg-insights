@@ -2,8 +2,8 @@ from flask import Flask, request
 from json import loads
 from flask_restful import Resource, Api, reqparse
 import requests
-from .classes.collection import Collection
-from .utils import getCurveFit, getBestCurveFit
+from classes.collection import Collection
+from utils import getCurveFit, getBestCurveFit
 
 # Config (TEMP)
 # API_ROOT_URL = 'https://sn-bgg-server.herokuapp.com'
