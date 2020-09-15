@@ -10,6 +10,7 @@ from utils import getCurveFit, getBestCurveFit
 
 ## collection.py ###############################
 
+from statistics import mean, median
 from scipy.stats import pearsonr, spearmanr
 from datetime import datetime
 from copy import copy

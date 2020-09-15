@@ -4,7 +4,7 @@ from datetime import datetime
 from copy import copy
 from .boardgame import Boardgame
 from .insight import Insight
-from ..utils import getBestCurveFit, getHighestCountKeys
+from utils import getBestCurveFit, getHighestCountKeys
 from collections import Counter
 
 LAST_LOGGED_PLAY_THRESH = 180
@@ -108,8 +108,8 @@ class Collection:
     def getNotPlayedItems(self):
         totalPlaysEachItem = self.getTotalPlaysEachItem()
         indexNoPlays = [i for i, x in enumerate(totalPlaysEachItem) if x == 0]
-        notPlyedItems = [self.items[x] for x in indexNoPlays]
-        return notPlyedItems
+        notPlayedItems = [self.items[x] for x in indexNoPlays]
+        return notPlayedItems
 
     def checkIfAnyRecordedPlays(self):
         plays = self.getTotalPlaysEachItem()
@@ -316,7 +316,7 @@ class Collection:
         return self.items[maxBggRatingIndex]
 
     def getLowestBggRating(self):
-        BggRatings = [x.bayesAverageRating for x in self.items]
+        BggRatings = [x.bayesAverageRating for x in self.items if x != 0]
         minBggRating = min(BggRatings)
         minBggRatingIndex = BggRatings.index(minBggRating)
         return self.items[minBggRatingIndex]
@@ -980,14 +980,19 @@ def genInsightAvgTimePlayed(collection):
 
 def genInsightNotPlayed(collection):
     insightType = 'notPlayed'
-    notPlyedItems = collection.getNotPlayedItems()
+    notPlayedItems = collection.getNotPlayedItems()
 
     if collection.getLastLoggedPlayDiff() > LAST_LOGGED_PLAY_THRESH:
         insightData = {
             'errorMessage': 'No recent logged plays.'
         }
         insightStatus = 'error'
-    elif notPlyedItems == []:
+    elif collection.totalPlays < 10:
+        insightData = {
+            'errorMessage': 'Not enough logged plays.'
+        }
+        insightStatus = 'error'
+    elif notPlayedItems == []:
         insightData = {
             'nNotPlayed': 0,
             'prctNotPlayed': 0,
@@ -995,12 +1000,12 @@ def genInsightNotPlayed(collection):
         insightStatus = 'ok'
     else:
         insightData = {
-            'nNotPlayed': len(notPlyedItems),
-            'prctNotPlayed': round(len(notPlyedItems)/len(collection.items), 2),
+            'nNotPlayed': len(notPlayedItems),
+            'prctNotPlayed': round(len(notPlayedItems)/len(collection.items), 2),
             'items': [{
                 'id': x.id,
                 'name': x.name,
-                'image': x.image} for x in notPlyedItems]
+                'image': x.image} for x in notPlayedItems]
         }
         insightStatus = 'ok'
 

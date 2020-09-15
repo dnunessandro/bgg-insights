@@ -2,12 +2,12 @@ from flask import Flask, request
 from json import loads
 from flask_restful import Resource, Api, reqparse
 import requests
-from .classes.collection import Collection
-from .utils import getCurveFit, getBestCurveFit
+from classes.collection import Collection
+from utils import getCurveFit, getBestCurveFit
 
 # Config (TEMP)
-API_ROOT_URL = 'https://sn-bgg-server.herokuapp.com'
-# API_ROOT_URL = "http://localhost:5000"
+# API_ROOT_URL = 'https://sn-bgg-server.herokuapp.com'
+API_ROOT_URL = "http://localhost:5000"
 
 app = Flask(__name__)
 api = Api(app)
@@ -51,8 +51,8 @@ class PolyFit(Resource):
             if 'polyparams' in args.keys():
                 polyParams = [int(x) for x in args['polyparams'].split(',')]
             else:
-                polyParams = [0,0,0,0,1]
-            
+                polyParams = [0, 0, 0, 0, 1]
+
             requestBody = request.get_json()
             x = requestBody['x']
             y = requestBody['y']
@@ -61,24 +61,25 @@ class PolyFit(Resource):
         except:
             return {'error': 'Could not compute fit curve'}, 500
 
-class BestPolyFit(Resource):
-        def post(self):
 
-            # try:
-            args = request.args
-            fitDomainMin = args['min']
-            fitDomainMax = args['max']
-            
-            requestBody = request.get_json()
-            x = requestBody['x']
-            y = requestBody['y']
-            
-            fitObject = getBestCurveFit(x, y, fitDomainMin, fitDomainMax)
-            
-            return fitObject, 200
-            # except e:
-            #     print(e)
-            #     return {'error': 'Could not compute fit curve'}, 500
+class BestPolyFit(Resource):
+    def post(self):
+
+        # try:
+        args = request.args
+        fitDomainMin = args['min']
+        fitDomainMax = args['max']
+
+        requestBody = request.get_json()
+        x = requestBody['x']
+        y = requestBody['y']
+
+        fitObject = getBestCurveFit(x, y, fitDomainMin, fitDomainMax)
+
+        return fitObject, 200
+        # except e:
+        #     print(e)
+        #     return {'error': 'Could not compute fit curve'}, 500
 
 
 api.add_resource(InsightsPost, '/insights/<string:type>')
