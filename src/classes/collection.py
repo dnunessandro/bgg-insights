@@ -38,7 +38,7 @@ class Collection:
         return statGames
 
     def getLastLoggedPlayDiff(self):
-        if hasattr(self, 'lastLoggedPlay') and self.lastLoggedPlay is not None:
+        if hasattr(self, 'lastLoggedPlay'):
             lastLoggedPlay = datetime.strptime(
                 self.lastLoggedPlay.split('T')[0], "%Y-%m-%d")
             return abs((datetime.now() - lastLoggedPlay).days)
