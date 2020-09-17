@@ -317,9 +317,11 @@ class Collection:
 
     def getLowestBggRating(self):
         BggRatings = [x.bayesAverageRating for x in self.items if x != 0]
+        nonZeroRatingItems = [
+            item for item in self.items if item.bayesAverageRating != 0]
         minBggRating = min(BggRatings)
         minBggRatingIndex = BggRatings.index(minBggRating)
-        return self.items[minBggRatingIndex]
+        return nonZeroRatingItems[minBggRatingIndex]
 
     def getAvgBggRating(self):
         bggRatings = [x.bayesAverageRating for x in self.items]
