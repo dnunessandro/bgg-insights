@@ -38,7 +38,7 @@ class Collection:
         return statGames
 
     def getLastLoggedPlayDiff(self):
-        if hasattr(self, 'lastLoggedPlay'):
+        if hasattr(self, 'lastLoggedPlay') and self.lastLoggedPlay != None:
             lastLoggedPlay = datetime.strptime(
                 self.lastLoggedPlay.split('T')[0], "%Y-%m-%d")
             return abs((datetime.now() - lastLoggedPlay).days)
@@ -1062,6 +1062,9 @@ def genInsightAvgValue(collection):
     if not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No recorded plays.'
+    elif round(collection.getAvgValue(), 2) == 0:
+        insightData = {}
+        insightStatus = 'Value is zero.'
     else:
         avgValue = collection.getAvgValue()
         insightData = {
@@ -1402,9 +1405,15 @@ def genInsightLargestNegRatingDiff(collection):
 
 def genInsightRatingAvgRatingCorr(collection):
     insightType = 'ratingAvgRatingCorr'
-    if len(collection.items) < 20:
+    items = [{
+        'id': x.id,
+        'name': x.name,
+        'image': x.image,
+        'userRating':  x.userRating,
+        'avgRating': x.averageRating} for x in collection.items if x.userRating is not None and x.averageRating is not None]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1413,12 +1422,7 @@ def genInsightRatingAvgRatingCorr(collection):
         insightData = {
             'pearsonr': ratingAvgRatingCorr['pearsonr'][0],
             'spearmanr': ratingAvgRatingCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'userRating':  x.userRating,
-                'avgRating': x.averageRating} for x in collection.items if x.userRating is not None and x.averageRating is not None]
+            'items': items
         }
         insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
@@ -1426,9 +1430,15 @@ def genInsightRatingAvgRatingCorr(collection):
 
 def genInsightRatingWeightCorr(collection):
     insightType = 'ratingWeightCorr'
-    if len(collection.items) < 20:
+    items = [{
+        'id': x.id,
+        'name': x.name,
+        'image': x.image,
+        'userRating':  x.userRating,
+        'weight': x.averageWeight} for x in collection.items if x.userRating is not None and x.averageWeight is not None]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1437,12 +1447,7 @@ def genInsightRatingWeightCorr(collection):
         insightData = {
             'pearsonr': ratingWeightCorr['pearsonr'][0],
             'spearmanr': ratingWeightCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'userRating':  x.userRating,
-                'weight': x.averageWeight} for x in collection.items if x.userRating is not None and x.averageWeight is not None]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['weight'] for e in insightData['items']], [
             e['userRating'] for e in insightData['items']], 1, 4.5)
@@ -1452,9 +1457,15 @@ def genInsightRatingWeightCorr(collection):
 
 def genInsightRatingRecommendedPlayersCorr(collection):
     insightType = 'ratingRecommendedPlayersCorr'
-    if len(collection.items) < 20:
+    items = [{
+        'id': x.id,
+        'name': x.name,
+        'image': x.image,
+        'userRating': x.userRating,
+        'recommendedPlayers': x.recommendedPlayers} for x in collection.items if x.userRating is not None]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1463,12 +1474,7 @@ def genInsightRatingRecommendedPlayersCorr(collection):
         insightData = {
             'pearsonr': ratingRecommendedPlayersCorr['pearsonr'][0],
             'spearmanr': ratingRecommendedPlayersCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'userRating': x.userRating,
-                'recommendedPlayers': x.recommendedPlayers} for x in collection.items if x.userRating is not None]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['recommendedPlayers'] for e in insightData['items']], [
             e['userRating'] for e in insightData['items']], 1, 7)
@@ -1478,9 +1484,15 @@ def genInsightRatingRecommendedPlayersCorr(collection):
 
 def genInsightRatingMaxPlayersCorr(collection):
     insightType = 'ratingMaxPlayersCorr'
-    if len(collection.items) < 20:
+    items = [{
+        'id': x.id,
+        'name': x.name,
+        'image': x.image,
+        'userRating': x.userRating,
+        'maxPlayers': x.maxPlayers} for x in collection.items if x.userRating is not None]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1489,12 +1501,7 @@ def genInsightRatingMaxPlayersCorr(collection):
         insightData = {
             'pearsonr': ratingMaxPlayersCorr['pearsonr'][0],
             'spearmanr': ratingMaxPlayersCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'userRating': x.userRating,
-                'maxPlayers': x.maxPlayers} for x in collection.items if x.userRating is not None]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['maxPlayers'] for e in insightData['items']], [
             e['userRating'] for e in insightData['items']], 1, 7)
@@ -1504,9 +1511,15 @@ def genInsightRatingMaxPlayersCorr(collection):
 
 def genInsightRatingPlayTimeCorr(collection):
     insightType = 'ratingPlayTimeCorr'
-    if len(collection.items) < 20:
+    items = [{
+        'id': x.id,
+        'name': x.name,
+        'image': x.image,
+        'userRating': x.userRating,
+        'playTime': x.playTime} for x in collection.items if x.userRating is not None]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1515,12 +1528,7 @@ def genInsightRatingPlayTimeCorr(collection):
         insightData = {
             'pearsonr': ratingPlayTimeCorr['pearsonr'][0],
             'spearmanr': ratingPlayTimeCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'userRating': x.userRating,
-                'playTime': x.playTime} for x in collection.items if x.userRating is not None]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['playTime'] for e in insightData['items']], [
             e['userRating'] for e in insightData['items']], 10, 300)
@@ -1530,9 +1538,15 @@ def genInsightRatingPlayTimeCorr(collection):
 
 def genInsightRatingPlaysCorr(collection):
     insightType = 'ratingPlaysCorr'
-    if len(collection.items) < 20:
+    items = [{
+        'id': x.id,
+        'name': x.name,
+        'image': x.image,
+        'userRating': x.userRating,
+        'nPlays': x.numPlays} for x in collection.items if x.userRating is not None and x.numPlays != 0]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No recorded plays.'
@@ -1544,12 +1558,7 @@ def genInsightRatingPlaysCorr(collection):
         insightData = {
             'pearsonr': ratingPlaysCorr['pearsonr'][0],
             'spearmanr': ratingPlaysCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'userRating': x.userRating,
-                'nPlays': x.numPlays} for x in collection.items if x.userRating is not None and x.numPlays != 0]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['nPlays'] for e in insightData['items']], [
             e['userRating'] for e in insightData['items']], 0, 100)
@@ -1559,9 +1568,17 @@ def genInsightRatingPlaysCorr(collection):
 
 def genInsightRatingTimePlayedCorr(collection):
     insightType = 'ratingTimePlayedCorr'
-    if len(collection.items) < 20:
+    items = [{
+        'id': x.id,
+        'name': x.name,
+        'image': x.image,
+        'userRating': x.userRating,
+        'nPlays': x.numPlays,
+        'playTime': x.playTime,
+        'timePlayed': round((x.numPlays * x.playTime)/60, 2)} for x in collection.items if x.userRating is not None and x.numPlays != 0 and x.playTime != 0]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No recorded plays.'
@@ -1573,14 +1590,7 @@ def genInsightRatingTimePlayedCorr(collection):
         insightData = {
             'pearsonr': ratingTimePlayedCorr['pearsonr'][0],
             'spearmanr': ratingTimePlayedCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'userRating': x.userRating,
-                'nPlays': x.numPlays,
-                'playTime': x.playTime,
-                'timePlayed': (x.numPlays * x.playTime)/60} for x in collection.items if x.userRating is not None and x.numPlays != 0 and x.playTime != 0]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['timePlayed'] for e in insightData['items']], [
             e['userRating'] for e in insightData['items']], 0, 100)
@@ -1590,9 +1600,15 @@ def genInsightRatingTimePlayedCorr(collection):
 
 def genInsightRatingPriceCorr(collection):
     insightType = 'ratingPriceCorr'
-    if len(collection.items) < 20:
+    items = [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'userRating': x.userRating,
+                'price': x.medianPriceNew} for x in collection.items if x.userRating is not None and x.medianPriceNew is not None]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1601,12 +1617,7 @@ def genInsightRatingPriceCorr(collection):
         insightData = {
             'pearsonr': ratingPriceCorr['pearsonr'][0],
             'spearmanr': ratingPriceCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'userRating': x.userRating,
-                'price': x.medianPriceNew} for x in collection.items if x.userRating is not None and x.medianPriceNew is not None]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['price'] for e in insightData['items']], [
             e['userRating'] for e in insightData['items']], 10, 300)
@@ -1616,26 +1627,25 @@ def genInsightRatingPriceCorr(collection):
 
 def genInsightRatingYearCorr(collection):
     insightType = 'ratingYearCorr'
-    if len(collection.items) < 20:
-        insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
-    elif not collection.checkIfAnyUserRatings():
-        insightData = {}
-        insightStatus = 'No rated items.'
-    else:
-        ratingYearCorr = collection.getRatingYearCorr()
-
-        insightData = {
-            'pearsonr': ratingYearCorr['pearsonr'][0],
-            'spearmanr': ratingYearCorr['spearmanr'][0],
-            'items': [{
+    items = [{
                 'id': x.id,
                 'name': x.name,
                 'image': x.image,
                 'userRating': x.userRating,
                 'yearPublished': x.yearPublished} for x in collection.items if x.userRating is not None and x.yearPublished is not None]
+    if len(items) < 30:
+        insightData = {}
+        insightStatus = 'Less than 30 boardgames to consider.'
+    elif not collection.checkIfAnyUserRatings():
+        insightData = {}
+        insightStatus = 'No rated items.'
+    else:
+        ratingYearCorr = collection.getRatingYearCorr()
+        insightData = {
+            'pearsonr': ratingYearCorr['pearsonr'][0],
+            'spearmanr': ratingYearCorr['spearmanr'][0],
+            'items': items
         }
-
         insightData['trend'] = getBestCurveFit([e['yearPublished'] for e in insightData['items']], [
             e['userRating'] for e in insightData['items']], 1980, 2020)
         insightStatus = 'ok'
@@ -1644,9 +1654,15 @@ def genInsightRatingYearCorr(collection):
 
 def genInsightPlaysWeightCorr(collection):
     insightType = 'playsWeightCorr'
-    if len(collection.items) < 20:
+    items = [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'nPlays': x.numPlays,
+                'weight': round(x.averageWeight, 1)} for x in collection.items if x.numPlays != 0 and x.averageWeight is not None]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No recorded plays.'
@@ -1655,12 +1671,7 @@ def genInsightPlaysWeightCorr(collection):
         insightData = {
             'pearsonr': playsWeightCorr['pearsonr'][0],
             'spearmanr': playsWeightCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'nPlays': x.numPlays,
-                'weight': round(x.averageWeight, 1)} for x in collection.items if x.numPlays != 0 and x.averageWeight is not None]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['weight'] for e in insightData['items']], [
             e['nPlays'] for e in insightData['items']], 1, 4.5)
@@ -1670,9 +1681,15 @@ def genInsightPlaysWeightCorr(collection):
 
 def genInsightPlaysPlayTimeCorr(collection):
     insightType = 'playsPlayTimeCorr'
-    if len(collection.items) < 20:
+    items = [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'nPlays': x.numPlays,
+                'playTime': x.playTime} for x in collection.items if x.numPlays != 0]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1681,12 +1698,7 @@ def genInsightPlaysPlayTimeCorr(collection):
         insightData = {
             'pearsonr': playsPlayTimeCorr['pearsonr'][0],
             'spearmanr': playsPlayTimeCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'nPlays': x.numPlays,
-                'playTime': x.playTime} for x in collection.items if x.numPlays != 0]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['playTime'] for e in insightData['items']], [
             e['nPlays'] for e in insightData['items']], 10, 300)
@@ -1696,9 +1708,15 @@ def genInsightPlaysPlayTimeCorr(collection):
 
 def genInsightPlaysRecommendedPlayersCorr(collection):
     insightType = 'playsRecommendedPlayersCorr'
-    if len(collection.items) < 20:
+    items = [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'nPlays': x.numPlays,
+                'recommendedPlayers': x.recommendedPlayers} for x in collection.items if x.numPlays != 0]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1707,12 +1725,7 @@ def genInsightPlaysRecommendedPlayersCorr(collection):
         insightData = {
             'pearsonr': playsRecommendedPlayersCorr['pearsonr'][0],
             'spearmanr': playsRecommendedPlayersCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'nPlays': x.numPlays,
-                'recommendedPlayers': x.recommendedPlayers} for x in collection.items if x.numPlays != 0]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['recommendedPlayers'] for e in insightData['items']], [
             e['nPlays'] for e in insightData['items']], 1, 7)
@@ -1722,9 +1735,15 @@ def genInsightPlaysRecommendedPlayersCorr(collection):
 
 def genInsightPlaysMaxPlayersCorr(collection):
     insightType = 'playsMaxPlayersCorr'
-    if len(collection.items) < 20:
+    items = [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'nPlays': x.numPlays,
+                'maxPlayers': x.maxPlayers} for x in collection.items if x.numPlays != 0]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1733,12 +1752,7 @@ def genInsightPlaysMaxPlayersCorr(collection):
         insightData = {
             'pearsonr': playsMaxPlayersCorr['pearsonr'][0],
             'spearmanr': playsMaxPlayersCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'nPlays': x.numPlays,
-                'maxPlayers': x.maxPlayers} for x in collection.items if x.numPlays != 0]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['maxPlayers'] for e in insightData['items']], [
             e['nPlays'] for e in insightData['items']], 1, 7)
@@ -1748,9 +1762,15 @@ def genInsightPlaysMaxPlayersCorr(collection):
 
 def genInsightPlaysPriceCorr(collection):
     insightType = 'playsPriceCorr'
-    if len(collection.items) < 20:
+    items = [{
+                'id': x.id,
+                'name': x.name,
+                'image': x.image,
+                'nPlays': x.numPlays,
+                'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None and x.numPlays != 0]
+    if len(items) < 30:
         insightData = {}
-        insightStatus = 'Less than 20 boardgames in collection.'
+        insightStatus = 'Less than 30 boardgames to consider.'
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No rated items.'
@@ -1759,12 +1779,7 @@ def genInsightPlaysPriceCorr(collection):
         insightData = {
             'pearsonr': playsPriceCorr['pearsonr'][0],
             'spearmanr': playsPriceCorr['spearmanr'][0],
-            'items': [{
-                'id': x.id,
-                'name': x.name,
-                'image': x.image,
-                'nPlays': x.numPlays,
-                'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None and x.numPlays != 0]
+            'items': items
         }
         insightData['trend'] = getBestCurveFit([e['price'] for e in insightData['items']], [
             e['nPlays'] for e in insightData['items']], 10, 300)
