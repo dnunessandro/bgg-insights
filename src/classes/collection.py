@@ -176,7 +176,7 @@ class Collection:
                 return False
 
     def checkIfAnyPrices(self):
-        prices = [x.medianPriceNew for x in self.items]
+        prices = [x.medianPrice for x in self.items]
         for price in prices:
             if(price != None):
                 return True
@@ -205,15 +205,15 @@ class Collection:
 
     def getMostExpensive(self):
         itemPrices = [
-            x.medianPriceNew for x in self.items if x.medianPriceNew != None]
-        itemsNotNone = [x for x in self.items if x.medianPriceNew != None]
+            x.medianPrice for x in self.items if x.medianPrice != None]
+        itemsNotNone = [x for x in self.items if x.medianPrice != None]
         maxIndex = itemPrices.index(max(itemPrices))
         return itemsNotNone[maxIndex]
 
     def getLeastExpensive(self):
         itemPrices = [
-            x.medianPriceNew for x in self.items if x.medianPriceNew != None]
-        itemsNotNone = [x for x in self.items if x.medianPriceNew != None]
+            x.medianPrice for x in self.items if x.medianPrice != None]
+        itemsNotNone = [x for x in self.items if x.medianPrice != None]
         minIndex = itemPrices.index(min(itemPrices))
         return itemsNotNone[minIndex]
 
@@ -487,9 +487,9 @@ class Collection:
         if not self.checkIfAnyUserRatings():
             return None
         ratings = [x.userRating for x in self.items]
-        prices = [x.medianPriceNew for x in self.items]
+        prices = [x.medianPrice for x in self.items]
         notNoneIndexes = [i for i, x in enumerate(
-            self.items) if x.userRating is not None and x.medianPriceNew is not None]
+            self.items) if x.userRating is not None and x.medianPrice is not None]
 
         notNoneRatings = [ratings[index] for index in notNoneIndexes]
         notNonePrices = [prices[index] for index in notNoneIndexes]
@@ -566,9 +566,9 @@ class Collection:
         if not self.checkIfAnyRecordedPlays():
             return None
         plays = self.getTotalPlaysEachItem()
-        prices = [x.medianPriceNew for x in self.items]
+        prices = [x.medianPrice for x in self.items]
         notNoneIndexes = [i for i, x in enumerate(
-            self.items) if x.medianPriceNew is not None and x.numPlays != 0]
+            self.items) if x.medianPrice is not None and x.numPlays != 0]
 
         notNoneRatings = [plays[index] for index in notNoneIndexes]
         notNonePrices = [
@@ -605,18 +605,18 @@ class Collection:
         return mean(minPlayers)
 
     def getAvgPrice(self):
-        prices = [x.medianPriceNew
-                  for x in self.items if x.medianPriceNew is not None and x.medianPriceNew <= 500]
+        prices = [x.medianPrice
+                  for x in self.items if x.medianPrice is not None and x.medianPrice <= 500]
         return mean(prices)
 
     def getMedianPrice(self):
-        prices = [x.medianPriceNew
-                  for x in self.items if x.medianPriceNew is not None]
+        prices = [x.medianPrice
+                  for x in self.items if x.medianPrice is not None]
         return median(prices)
 
     def getTotalPrice(self):
-        prices = [x.medianPriceNew
-                  for x in self.items if x.medianPriceNew is not None and x.medianPriceNew <= 500]
+        prices = [x.medianPrice
+                  for x in self.items if x.medianPrice is not None and x.medianPrice <= 500]
         return sum(prices)
 
     def getAllRanks(self):
@@ -1028,7 +1028,7 @@ def genInsightBestValue(collection):
                 'name': bestValueItem.name,
                 'image': bestValueItem.image,
                 'nPlays': bestValueItem.numPlays,
-                'price': bestValueItem.medianPriceNew,
+                'price': bestValueItem.medianPrice,
                 'value': bestValueItem.getItemValue()}]
         }
         insightStatus = "ok"
@@ -1050,7 +1050,7 @@ def genInsightWorstValue(collection):
                 'name': worstValueItem.name,
                 'image': worstValueItem.image,
                 'nPlays': worstValueItem.numPlays,
-                'price': worstValueItem.medianPriceNew,
+                'price': worstValueItem.medianPrice,
                 'value': worstValueItem.getItemValue()}]
         }
         insightStatus = "ok"
@@ -1074,7 +1074,7 @@ def genInsightAvgValue(collection):
                 'name': x.name,
                 'image': x.image,
                 'nPlays': x.numPlays,
-                'price': x.medianPriceNew,
+                'price': x.medianPrice,
                 'value': x.getItemValue()} for x in collection.items if x.getItemValue() != -1]
         }
         insightStatus = "ok"
@@ -1605,7 +1605,7 @@ def genInsightRatingPriceCorr(collection):
                 'name': x.name,
                 'image': x.image,
                 'userRating': x.userRating,
-                'price': x.medianPriceNew} for x in collection.items if x.userRating is not None and x.medianPriceNew is not None]
+                'price': x.medianPrice} for x in collection.items if x.userRating is not None and x.medianPrice is not None]
     if len(items) < 30:
         insightData = {}
         insightStatus = 'Less than 30 boardgames to consider.'
@@ -1767,7 +1767,7 @@ def genInsightPlaysPriceCorr(collection):
                 'name': x.name,
                 'image': x.image,
                 'nPlays': x.numPlays,
-                'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None and x.numPlays != 0]
+                'price': x.medianPrice} for x in collection.items if x.medianPrice is not None and x.numPlays != 0]
     if len(items) < 30:
         insightData = {}
         insightStatus = 'Less than 30 boardgames to consider.'
@@ -1927,7 +1927,7 @@ def genInsightAvgPrice(collection):
                 'id': x.id,
                 'name': x.name,
                 'image': x.image,
-                'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None and x.medianPriceNew <= 500]
+                'price': x.medianPrice} for x in collection.items if x.medianPrice is not None and x.medianPrice <= 500]
         }
         insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
@@ -1947,7 +1947,7 @@ def genInsightMedianPrice(collection):
                 'id': x.id,
                 'name': x.name,
                 'image': x.image,
-                'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None]
+                'price': x.medianPrice} for x in collection.items if x.medianPrice is not None]
         }
         insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
@@ -1967,7 +1967,7 @@ def genInsightTotalPrice(collection):
                 'id': x.id,
                 'name': x.name,
                 'image': x.image,
-                'price': x.medianPriceNew} for x in collection.items if x.medianPriceNew is not None and x.medianPriceNew <= 500]
+                'price': x.medianPrice} for x in collection.items if x.medianPrice is not None and x.medianPrice <= 500]
         }
         insightStatus = 'ok'
     return Insight(insightType, insightData, insightStatus)
