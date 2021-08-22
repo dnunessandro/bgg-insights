@@ -6,8 +6,8 @@ from .classes.collection import Collection
 from .utils import getCurveFit, getBestCurveFit
 
 # Config (TEMP)
-API_ROOT_URL = 'https://sn-bgg-server.herokuapp.com'
-# API_ROOT_URL = "http://localhost:5000"
+# API_ROOT_URL = 'https://sn-bgg-server.herokuapp.com'
+API_ROOT_URL = "http://localhost:5000"
 
 app = Flask(__name__)
 api = Api(app)

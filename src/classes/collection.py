@@ -399,7 +399,16 @@ class Collection:
         notNoneRatings = [ratings[index] for index in notNoneIndexes]
         notNoneAvgRatings = [avgRatings[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNoneAvgRatings), 'spearmanr': spearmanr(notNoneRatings, notNoneAvgRatings)}
+        pearsonCorr = pearsonr(notNoneRatings, notNoneAvgRatings)
+        spearmanCorr = spearmanr(notNoneRatings, notNoneAvgRatings)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getRatingWeightCorr(self):
         if not self.checkIfAnyUserRatings():
@@ -412,7 +421,16 @@ class Collection:
         notNoneRatings = [ratings[index] for index in notNoneIndexes]
         notNoneWeights = [weights[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNoneWeights), 'spearmanr': spearmanr(notNoneRatings, notNoneWeights)}
+        pearsonCorr = pearsonr(notNoneRatings, notNoneWeights)
+        spearmanCorr = spearmanr(notNoneRatings, notNoneWeights)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getRatingRecommendedPlayersCorr(self):
         if not self.checkIfAnyUserRatings():
@@ -426,7 +444,16 @@ class Collection:
         notNoneRecommendedPlayers = [
             recommendedPlayers[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNoneRecommendedPlayers), 'spearmanr': spearmanr(notNoneRatings, notNoneRecommendedPlayers)}
+        pearsonCorr = pearsonr(notNoneRatings, notNoneRecommendedPlayers)
+        spearmanCorr = spearmanr(notNoneRatings, notNoneRecommendedPlayers)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr }
 
     def getRatingMaxPlayersCorr(self):
         if not self.checkIfAnyUserRatings():
@@ -440,7 +467,16 @@ class Collection:
         notNoneMaxPlayers = [
             maxPlayers[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNoneMaxPlayers), 'spearmanr': spearmanr(notNoneRatings, notNoneMaxPlayers)}
+        pearsonCorr = pearsonr(notNoneRatings, notNoneMaxPlayers)
+        spearmanCorr = spearmanr(notNoneRatings, notNoneMaxPlayers)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getRatingPlayTimeCorr(self):
         if not self.checkIfAnyUserRatings():
@@ -453,7 +489,16 @@ class Collection:
         notNoneRatings = [ratings[index] for index in notNoneIndexes]
         notNonePlayTimes = [playTimes[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNonePlayTimes), 'spearmanr': spearmanr(notNoneRatings, notNonePlayTimes)}
+        pearsonCorr = pearsonr(notNoneRatings, notNonePlayTimes)
+        spearmanCorr = spearmanr(notNoneRatings, notNonePlayTimes)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getRatingPlaysCorr(self):
         if not self.checkIfAnyUserRatings() or not self.checkIfAnyRecordedPlays():
@@ -466,7 +511,16 @@ class Collection:
         notNoneRatings = [ratings[index] for index in notNoneIndexes]
         notNonePlays = [plays[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNonePlays), 'spearmanr': spearmanr(notNoneRatings, notNonePlays)}
+        pearsonCorr = pearsonr(notNoneRatings, notNonePlays)
+        spearmanCorr = spearmanr(notNoneRatings, notNonePlays)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getRatingTimePlayedCorr(self):
         if not self.checkIfAnyUserRatings() or not self.checkIfAnyRecordedPlays():
@@ -481,7 +535,16 @@ class Collection:
         notNoneRatings = [ratings[index] for index in notNoneIndexes]
         notNoneTimePlayed = [timePlayed[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNoneTimePlayed), 'spearmanr': spearmanr(notNoneRatings, notNoneTimePlayed)}
+        pearsonCorr = pearsonr(notNoneRatings, notNoneTimePlayed)
+        spearmanCorr = spearmanr(notNoneRatings, notNoneTimePlayed)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getRatingPriceCorr(self):
         if not self.checkIfAnyUserRatings():
@@ -494,7 +557,16 @@ class Collection:
         notNoneRatings = [ratings[index] for index in notNoneIndexes]
         notNonePrices = [prices[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNonePrices), 'spearmanr': spearmanr(notNoneRatings, notNonePrices)}
+        pearsonCorr = pearsonr(notNoneRatings, notNonePrices)
+        spearmanCorr = spearmanr(notNoneRatings, notNonePrices)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getRatingYearCorr(self):
         if not self.checkIfAnyUserRatings():
@@ -507,7 +579,16 @@ class Collection:
         notNoneRatings = [ratings[index] for index in notNoneIndexes]
         notNoneYears = [years[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNoneYears), 'spearmanr': spearmanr(notNoneRatings, notNoneYears)}
+        pearsonCorr = pearsonr(notNoneRatings, notNoneYears)
+        spearmanCorr = spearmanr(notNoneRatings, notNoneYears)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getPlaysWeightCorr(self):
         if not self.checkIfAnyRecordedPlays():
@@ -520,7 +601,16 @@ class Collection:
         notNonePlays = [plays[index] for index in notNoneIndexes]
         notNoneWeights = [weights[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNonePlays, notNoneWeights), 'spearmanr': spearmanr(notNonePlays, notNoneWeights)}
+        pearsonCorr = pearsonr(notNonePlays, notNoneWeights)
+        spearmanCorr = spearmanr(notNonePlays, notNoneWeights)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getPlaysPlayTimeCorr(self):
         if not self.checkIfAnyRecordedPlays():
@@ -532,7 +622,16 @@ class Collection:
         notNonePlays = [plays[index] for index in notNoneIndexes]
         notNonePlayTimes = [playTimes[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNonePlays, notNonePlayTimes), 'spearmanr': spearmanr(notNonePlays, notNonePlayTimes)}
+        pearsonCorr = pearsonr(notNonePlays, notNonePlayTimes)
+        spearmanCorr = spearmanr(notNonePlays, notNonePlayTimes)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getPlaysRecommendedPlayersCorr(self):
         if not self.checkIfAnyRecordedPlays():
@@ -546,7 +645,16 @@ class Collection:
         notNoneRecommendedPlayers = [
             recommendedPlayers[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNoneRecommendedPlayers), 'spearmanr': spearmanr(notNoneRatings, notNoneRecommendedPlayers)}
+        pearsonCorr = pearsonr(notNoneRatings, notNoneRecommendedPlayers)
+        spearmanCorr = spearmanr(notNoneRatings, notNoneRecommendedPlayers)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getPlaysMaxPlayersCorr(self):
         if not self.checkIfAnyRecordedPlays():
@@ -560,7 +668,16 @@ class Collection:
         notNoneMaxPlayers = [
             maxPlayers[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNoneMaxPlayers), 'spearmanr': spearmanr(notNoneRatings, notNoneMaxPlayers)}
+        pearsonCorr = pearsonr(notNoneRatings, notNoneMaxPlayers)
+        spearmanCorr = spearmanr(notNoneRatings, notNoneMaxPlayers)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getPlaysPriceCorr(self):
         if not self.checkIfAnyRecordedPlays():
@@ -574,7 +691,16 @@ class Collection:
         notNonePrices = [
             prices[index] for index in notNoneIndexes]
 
-        return {'pearsonr': pearsonr(notNoneRatings, notNonePrices), 'spearmanr': spearmanr(notNoneRatings, notNonePrices)}
+        pearsonCorr = pearsonr(notNoneRatings, notNonePrices)
+        spearmanCorr = spearmanr(notNoneRatings, notNonePrices)
+
+        if type(pearsonCorr) is tuple:
+            return None
+
+        if type(spearmanCorr) is tuple:
+            return None
+
+        return {'pearsonr': pearsonCorr, 'spearmanr': spearmanCorr}
 
     def getAvgYear(self):
         years = [x.yearPublished for x in self.items if x.yearPublished is not None]
@@ -1417,6 +1543,9 @@ def genInsightRatingAvgRatingCorr(collection):
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getRatingAvgRatingCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         ratingAvgRatingCorr = collection.getRatingAvgRatingCorr()
         insightData = {
@@ -1442,6 +1571,9 @@ def genInsightRatingWeightCorr(collection):
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getRatingWeightCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         ratingWeightCorr = collection.getRatingWeightCorr()
         insightData = {
@@ -1469,6 +1601,9 @@ def genInsightRatingRecommendedPlayersCorr(collection):
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getRatingRecommendedPlayersCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         ratingRecommendedPlayersCorr = collection.getRatingRecommendedPlayersCorr()
         insightData = {
@@ -1496,6 +1631,9 @@ def genInsightRatingMaxPlayersCorr(collection):
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getRatingMaxPlayersCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         ratingMaxPlayersCorr = collection.getRatingMaxPlayersCorr()
         insightData = {
@@ -1523,6 +1661,9 @@ def genInsightRatingPlayTimeCorr(collection):
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif  collection.getRatingPlayTimeCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         ratingPlayTimeCorr = collection.getRatingPlayTimeCorr()
         insightData = {
@@ -1553,6 +1694,9 @@ def genInsightRatingPlaysCorr(collection):
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getRatingPlaysCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         ratingPlaysCorr = collection.getRatingPlaysCorr()
         insightData = {
@@ -1585,6 +1729,9 @@ def genInsightRatingTimePlayedCorr(collection):
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getRatingTimePlayedCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         ratingTimePlayedCorr = collection.getRatingTimePlayedCorr()
         insightData = {
@@ -1600,6 +1747,7 @@ def genInsightRatingTimePlayedCorr(collection):
 
 def genInsightRatingPriceCorr(collection):
     insightType = 'ratingPriceCorr'
+
     items = [{
                 'id': x.id,
                 'name': x.name,
@@ -1612,6 +1760,9 @@ def genInsightRatingPriceCorr(collection):
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif  collection.getRatingPriceCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         ratingPriceCorr = collection.getRatingPriceCorr()
         insightData = {
@@ -1639,6 +1790,9 @@ def genInsightRatingYearCorr(collection):
     elif not collection.checkIfAnyUserRatings():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getRatingYearCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         ratingYearCorr = collection.getRatingYearCorr()
         insightData = {
@@ -1666,6 +1820,9 @@ def genInsightPlaysWeightCorr(collection):
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No recorded plays.'
+    elif  collection.getPlaysWeightCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         playsWeightCorr = collection.getPlaysWeightCorr()
         insightData = {
@@ -1693,6 +1850,9 @@ def genInsightPlaysPlayTimeCorr(collection):
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getPlaysPlayTimeCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         playsPlayTimeCorr = collection.getPlaysPlayTimeCorr()
         insightData = {
@@ -1720,6 +1880,9 @@ def genInsightPlaysRecommendedPlayersCorr(collection):
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getPlaysRecommendedPlayersCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         playsRecommendedPlayersCorr = collection.getPlaysRecommendedPlayersCorr()
         insightData = {
@@ -1747,6 +1910,9 @@ def genInsightPlaysMaxPlayersCorr(collection):
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getPlaysMaxPlayersCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         playsMaxPlayersCorr = collection.getPlaysMaxPlayersCorr()
         insightData = {
@@ -1774,6 +1940,9 @@ def genInsightPlaysPriceCorr(collection):
     elif not collection.checkIfAnyRecordedPlays():
         insightData = {}
         insightStatus = 'No rated items.'
+    elif collection.getPlaysPriceCorr() is None:
+        insightData = {}
+        insightStatus = 'Correlation could not be computed.'
     else:
         playsPriceCorr = collection.getPlaysPriceCorr()
         insightData = {
